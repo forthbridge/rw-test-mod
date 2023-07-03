@@ -1,0 +1,11 @@
+{
+	"id": "forthbridge.testmod",
+	"name": "Test Mod",
+	"version": "0.0.0",
+	"authors": "forthbridge",
+	"description": "",
+	"requirements": [],
+	"requirements_names": [],
+	"tags": [],
+	"checksum_override_version": false
+}
