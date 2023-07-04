@@ -1,7 +1,7 @@
 ﻿using Menu.Remix.MixedUI;
 using UnityEngine;
 
-namespace TestMod;
+namespace ForthMod;
 
 public sealed class ModOptions : OptionsTemplate
 {
@@ -33,7 +33,7 @@ public sealed class ModOptions : OptionsTemplate
         AddCheckBox(TestOption);
         DrawCheckBoxes(ref Tabs[tabIndex]);
 
-        AddNewLine(21);
+        AddNewLine(18);
         DrawBox(ref Tabs[tabIndex]);
 
         if (GetConfigurable(TestOption, out OpCheckBox checkBox))

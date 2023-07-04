@@ -10,13 +10,12 @@ using System.Security;
 [module: UnverifiableCode]
 #pragma warning restore CS0618 // Type or member is obsolete
 
-namespace TestMod;
+namespace ForthMod;
 
 [BepInPlugin(MOD_ID, MOD_ID, "1.0.0")]
-
 public class Plugin : BaseUnityPlugin
 {
-    public const string MOD_ID = "testmod";
+    public const string MOD_ID = "forthmod";
     
     public static string MOD_NAME = "";
     public static string VERSION = "";
@@ -27,6 +26,6 @@ public class Plugin : BaseUnityPlugin
     public void OnEnable()
     {
         Logger = base.Logger;
-        Hooks.ApplyHooks();
+        Hooks.ApplyOnModsInit();
     }
 }

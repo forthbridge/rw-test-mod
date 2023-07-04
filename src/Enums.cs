@@ -1,5 +1,5 @@
 ﻿
-namespace TestMod;
+namespace ForthMod;
 
 public static class Enums
 {
