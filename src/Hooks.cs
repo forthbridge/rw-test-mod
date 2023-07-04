@@ -1,8 +1,10 @@
 ﻿using Menu.Remix;
+using RWCustom;
 using System;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using UnityEngine;
 
 namespace ForthMod;
 
@@ -53,23 +55,50 @@ public static partial class Hooks
         orig(self);
 
         var module = self.GetMenuModListModule();
-        module.Timer++;
-
-        if (module.Timer % 10 != 0) return;
-
 
         var thisModButton = self.modButtons.FirstOrDefault(x => x.ModID == Plugin.MOD_ID);
-
         if (thisModButton == null) return;
 
-        var index = self.modButtons.IndexOf(thisModButton);
+        var buttonPos = thisModButton.ScreenPos;
+        var mousePos = self.Menu.mousePosition;
 
-        if (thisModButton.selectOrder >= self._currentSelections.Length - 1 || thisModButton.selectOrder <= 0)
-            module.IsDirUp = !module.IsDirUp;        
+        var xDiff = Mathf.Abs(buttonPos.x - mousePos.x);
+        var dist = Custom.Dist(buttonPos, mousePos);
 
-        var dir = module.IsDirUp ? 1 : -1;
+        var inRange = dist < 150.0f;
 
-        var nextModButton = self.visibleModButtons[thisModButton.viewIndex + dir];
+        if (inRange && xDiff < 150.0f)
+            module.MoveCounter = 3;
+
+        var wait = Custom.LerpMap(dist, 150.0f, 50.0f, 3, 0);
+        module.Timer++;
+
+        if (module.Timer <= wait) return;
+        module.Timer = 0;
+
+        if (module.MoveCounter <= 0) return;
+        module.MoveCounter--;
+
+
+        var yDiff = buttonPos.y - mousePos.y;
+
+        if (inRange)
+            module.Dir = yDiff <= 0 ? 1 : -1;
+
+        var index = thisModButton.viewIndex + module.Dir;
+
+        if (thisModButton.selectOrder >= self._currentSelections.Length - 1)
+        {
+            index = 0;
+            module.MoveCounter++;
+        }
+        else if (thisModButton.selectOrder <= 0)
+        {
+            index = self._currentSelections.Length - 1;
+            module.MoveCounter++;
+        }
+
+        var nextModButton = self.visibleModButtons[index];
         
         (thisModButton.selectOrder, nextModButton.selectOrder) = (nextModButton.selectOrder, thisModButton.selectOrder);
         self.RefreshAllButtons();
